@@ -105,7 +105,8 @@ play()
 
 ## Milestone 5 (camera_rps.py)
 This milestone introduced the user input via the camera. Therefore the rps template was used to use the recorded CV model to provide predictions from the users camera input. The game was also enclosed within a class which is then called and intialised by one function at the bottom of the code. Finally, messages are included in the camera frame on the users screen using CV2.PutText, the aim of this is to improve the users gameplay experience. Several areas of the code have been improved. Here the get_winner() function has been compacted to improve readibility. The countdown before the game commences has also been imrpoved to work by seconds and not count as previosuly done in milestone 4 (above).
-'''
+
+```
 
 #Imports the required packages for this project
 import random
@@ -240,8 +241,7 @@ class Game:
                     break
 
     
-
-    # This fuction intialises the game and provides logic to determine the winner on a first to 3 wins basis
+# This fuction intialises the game and provides logic to determine the winner on a first to 3 wins basis
 def game():
     computer_wins = 0
     user_wins = 0
@@ -270,4 +270,4 @@ def game():
             
 
 game()
-'''
+```
