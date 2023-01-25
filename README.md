@@ -3,7 +3,7 @@ This project formed the second project of the AiCore data accelerator I am curre
 
 The aim of this project was to develop skills within computer vision. To develop these skills, a game of rock, paper, scissors was created using teachablemachine.withgoogle.com to train a model based on several images from 3 different classes, the game was then developed in python using this image based model.
 
-## Milestone 2
+## Milestone 1
 Using teachablemachine.withgoogle.com a model was trained with images for 3 classes ('Rock', 'Paper', 'Scissors').
 ```
 from keras.models import load_model
@@ -51,7 +51,7 @@ print('Class: ', class_name, end='')
 print('Confidence Score: ', confidence_score)
 ```
 
-## Milestone 4 (Manual_rps.py)
+## Milestone 2 (Manual_rps.py)
 This .py document provides a manual version of the rock, paper scissors game that requires a user input to play against a randomly chosen computer choice
 
 ```
@@ -115,7 +115,7 @@ play()
 
 ```
 
-## Milestone 5 (camera_rps.py)
+## Milestone 3 
 In this milestone, the functions in milestone 4 were developed into a class. The get_user_choice() method was adapted to take in the camera input and and predict the input using the tensorflow computer vision model. Furthermore, the game_intro() and result_report() methods were added to the class to provide further game logic. Finally the game() function outside of the class provides overall game logic of the first to 3 wins the whole game.
 
 
