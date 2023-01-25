@@ -7,6 +7,13 @@ def get_computer_choice():
     
 
 def get_user_choice():
+    """
+    This function prompts the user to input a choice of "rock", "paper", or "scissors".
+    The function uses a while loop to repeatedly ask for input until the user provides a valid choice.
+    It uses the 'input' function to request the user's choice and the 'valid_answers' list to check for valid input.
+    If the input is not in the 'valid_answers' list, the function will print "Invalid input, please re-enter your answer" and loop again.
+    If the input is valid, the function returns the user's choice as a string.
+    """
     valid_answers = ["rock","paper","scissors"] # String of potential inputs to complete a validity check against
     while True:
         user_choice = str(input("Please input of one of the following, rock, paper or scissors")) # Asks the user for a string input
@@ -43,5 +50,7 @@ def get_winner(computer_choice, user_choice): # Function passes the computer and
 
 def play():
     get_winner(get_computer_choice(), get_user_choice()) # This function calls the game functions and passes the computer choice and user choice function as arguments
+
+
 
 play()
