@@ -1,8 +1,10 @@
 # Computer Vision RPS
+This project formed the second project of the AiCore data accelerator I am currently undertaking. This project further developed my skills in python and command line, it also introduced me to computer vision models, as well as the tensorflow and opencv API's.
+
 The aim of this project was to develop skills within computer vision. To develop these skills, a game of rock, paper, scissors was created using teachablemachine.withgoogle.com to train a model based on several images from 3 different classes, the game was then developed in python using this image based model.
 
 ## Milestone 2
-Using teachablemachine.withgoogle.com a model was trained with images for 3 classes ('Rock', 'Paper', 'Scissors'). The model was then trained by the software on the site and can be seen below.
+Using teachablemachine.withgoogle.com a model was trained with images for 3 classes ('Rock', 'Paper', 'Scissors').
 ```
 from keras.models import load_model
 from PIL import Image, ImageOps
@@ -55,13 +57,27 @@ This .py document provides a manual version of the rock, paper scissors game tha
 ```
 import random
 
-def get_computer_choice():
-    valid_answers = ["rock","paper","scissors"] # Creates the string of possible choices
-    computer_choice = random.choice(valid_answers) # Random.choice function provides a random choice of the valid_answers variable
-    return computer_choice # Returns the output
+
+def get_computer_choice(self):
+    """
+    This function generates a random choice of 'rock', 'paper', or 'scissors' for the computer.
+    The function uses the 'random' module to select the choice from a list of valid answers.
+    The function assigns the choice to the self.computer_choice attribute and returns the choice as a string.
+    """
+    valid_answers = ["rock","paper","scissors"]
+    computer_choice = random.choice(valid_answers)
+    self.computer_choice = computer_choice
+    return computer_choice
     
 
 def get_user_choice():
+    """
+    This function prompts the user to input a choice of "rock", "paper", or "scissors".
+    The function uses a while loop to repeatedly ask for input until the user provides a valid choice.
+    It uses the 'input' function to request the user's choice and the 'valid_answers' list to check for valid input.
+    If the input is not in the 'valid_answers' list, the function will print "Invalid input, please re-enter your answer" and loop again.
+    If the input is valid, the function returns the user's choice as a string.
+    """
     valid_answers = ["rock","paper","scissors"] # String of potential inputs to complete a validity check against
     while True:
         user_choice = str(input("Please input of one of the following, rock, paper or scissors")) # Asks the user for a string input
@@ -71,30 +87,26 @@ def get_user_choice():
             return user_choice # If the input passes the valid check, then the input will be returned
 
 
-def get_winner(computer_choice, user_choice): # Function passes the computer and user choice as arguments 
-    print(f"Your choice was {user_choice}") 
-    print(f"The computer selected {computer_choice}") 
-    if computer_choice == user_choice: # Checks whether the user or computer won the game based on the inputs provided in the choice functions
-        print("Both players selected the same choice, please select again")
-    elif computer_choice == "rock":
-        if user_choice == "paper":
-            print("Congratulations, you won")
-        elif user_choice == "scissors":
+ def get_winner(self, computer_choice, user_choice):
+        """
+        This function compares the computer's choice and the user's choice and determines the winner of the round.
+        The function takes two arguments:
+        - computer_choice: The choice of the computer.
+        - user_choice: The choice of the user.
+        """
+        print(f"Your choice was {user_choice}")
+        print(f"The computer selected {computer_choice}")
+        # Both the user and the computers inputs are the same
+        if computer_choice == user_choice:
+                print("Both players selected the same choice, please select again")
+        # Cases in which the computer wins
+        elif (computer_choice == "rock" and user_choice == "scissors") or (computer_choice == "paper" and user_choice == "rock") or (computer_choice == "scissors" and user_choice == "paper"):
             print("Unlucky, the computer wins")
-
-    elif computer_choice == "paper":
-        if user_choice == "rock":
-            print("Unlucky, the computer wins")
-        elif user_choice == "scissors":
+            self.computer_wins = self.computer_wins +1
+        # Cases in which the user wins
+        elif (user_choice == "rock" and computer_choice == "scissors") or (user_choice == "paper" and computer_choice == "rock") or (user_choice == "scissors" and computer_choice == "paper"):
             print("Congratulations, you won")
-
-
-    elif computer_choice == "scissors":
-        if user_choice == "rock":
-            print("Congratulations, you won")
-        elif user_choice == "paper":
-            print("Unlucky, the computer wins")
-
+            self.user_wins = self.user_wins +1
 
 def play():
     get_winner(get_computer_choice(), get_user_choice()) # This function calls the game functions and passes the computer choice and user choice function as arguments
@@ -104,20 +116,44 @@ play()
 ```
 
 ## Milestone 5 (camera_rps.py)
-This milestone introduced the user input via the camera. Therefore the rps template was used to use the recorded CV model to provide predictions from the users camera input. The game was also enclosed within a class which is then called and intialised by one function at the bottom of the code. Finally, messages are included in the camera frame on the users screen using CV2.PutText, the aim of this is to improve the users gameplay experience. Several areas of the code have been improved. Here the get_winner() function has been compacted to improve readibility. The countdown before the game commences has also been imrpoved to work by seconds and not count as previosuly done in milestone 4 (above).
+In this milestone, the functions in milestone 4 were developed into a class. The get_user_choice() method was adapted to take in the camera input and and predict the input using the tensorflow computer vision model. Furthermore, the game_intro() and result_report() methods were added to the class to provide further game logic. Finally the game() function outside of the class provides overall game logic of the first to 3 wins the whole game.
+
 
 ```
 
-#Imports the required packages for this project
-import random
-import cv2
-from keras.models import load_model
-import numpy as np
-import time
-
-
 class Game:
+   """The Game class plays a game of rock-paper-scissors with the user.
+    The class takes two arguments:
+        - computer_choice: The choice of the computer, randomly chosen from a list of options.
+        - user_choice: The choice of the user, determined by image capture and a trained model.
+    The class has several parameters:
+        - computer_wins: an integer representing the number of wins the computer has
+        - user_wins: an integer representing the number of wins the user has
+        - options: a list of strings representing the options for the game (rock, paper, scissors)
+        - count: an integer representing the number of rounds in the game
+        - font: the font used for the text display
+        - txt_colour: the color of the text in the display
+        - cap: the video capture object used to capture the user's input
+    The class has two methods:
+        - get_user_choice(): This function uses a tensorflow computer vision model to predict the user's choice of rock, paper, or scissors based on an image of their hand.
+        - game_intro(): This function provides an introduction screen with instructions to the user."""
+
     def __init__(self, computer_choice, user_choice):
+        """
+        The constructor for the Game class.
+        Takes two arguments:
+            - computer_choice: The choice of the computer, randomly chosen from a list of options.
+            - user_choice: The choice of the user, determined by image capture and a trained model.
+        Sets several parameters:
+            - computer_wins: an integer representing the number of wins the computer has in the game
+            - user_wins: an integer representing the number of wins the user has in the game
+            - options: a list of strings representing the options for the game (rock, paper, scissors)
+            - computer_choice: a string representing the computer's choice, which is randomly chosen from the options list
+            - count: an integer representing the number of rounds in the game
+            - font: the font used for the text display
+            - txt_colour: the color of the text in the display
+            - cap: the video capture object used to capture the user's input
+        """
         #Arguments to the class
         self.computer_choice = computer_choice 
         self.user_choice = user_choice
@@ -132,8 +168,16 @@ class Game:
         self.txt_colour = (0,0,225)
         self.cap = cv2.VideoCapture(0)
 
-    # This function intiates the tensorflow computer vision file which provides a probability prediction using a trained model to determine the users input
+   
     def get_user_choice(self): 
+        """
+        This function uses a pre-trained tensorflow computer vision model to predict the user's choice of rock, paper, or scissors based on an image of their hand.
+        The model is loaded from the file 'keras_model.h5' and the user's input is captured using openCV. 
+        The function also has two countdown timers: one for the image capture and one for the start of the round.
+        The function uses the 'time' module to handle the timers.
+        The user's choice is determined by the index of the highest probability in the output of the model.
+        The function returns the user's choice as a string.
+        """
         model = load_model('keras_model.h5')
         data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
         image_capture = time.time()+10 # Timepoint for image capture
@@ -169,8 +213,16 @@ class Game:
         self.user_choice = user_choice
         return user_choice 
     
-    # This function provides an introduction screen with simple instructions to the user
+    
     def game_intro(self):
+        """
+        This function provides an introduction screen with instructions to the user.
+        The function uses two countdown timers: one for the first part of the introduction and one for the second part.
+        The function uses the 'time' module to handle the timers.
+        The function uses OpenCV to display the text on the screen and capture the user input.
+        The function breaks the loop and return nothing once the introduction is completed.
+        """
+
         intro_time1 = time.time() +8 # Time periiod used for part 1 of the introduction
         intro_time2 = time.time() +15 # Time period used for part 2 of the introduction
 
@@ -194,16 +246,25 @@ class Game:
                 break
 
 
-
-    # This function procides a randomised input for the computer
     def get_computer_choice(self):
+        """
+        This function generates a random choice of 'rock', 'paper', or 'scissors' for the computer.
+        The function uses the 'random' module to select the choice from a list of valid answers.
+        The function assigns the choice to the self.computer_choice attribute and returns the choice as a string.
+        """
         valid_answers = ["rock","paper","scissors"]
         computer_choice = random.choice(valid_answers)
         self.computer_choice = computer_choice
         return computer_choice
 
-    # This function determines a winner from the user input and computer inputs provided
+
     def get_winner(self, computer_choice, user_choice):
+        """
+        This function compares the computer's choice and the user's choice and determines the winner of the round.
+        The function takes two arguments:
+        - computer_choice: The choice of the computer.
+        - user_choice: The choice of the user.
+        """
         print(f"Your choice was {user_choice}")
         print(f"The computer selected {computer_choice}")
         # Both the user and the computers inputs are the same
@@ -220,6 +281,16 @@ class Game:
     
     # This function provides the user with a visible result on the screen as well as the scores at the current stage
     def result_report(self, user_choice, computer_choice):
+        """    
+        This function displays the results of the round and the total number of wins for the user and computer.
+        The function takes two arguments:
+        - user_choice: The choice of the user.
+        - computer_choice: The choice of the computer.
+        The function uses two countdown timers to display the results and the wins for a certain amount of time.
+        The function uses the 'time' module to handle the timers.
+        The function uses OpenCV to display the text on the screen and capture the user input.
+        The function breaks the loop and return nothing once the results are displayed.
+        """
         result_time1 = time.time() +5
         result_time2 = time.time()+ 10
         while True:
@@ -241,8 +312,17 @@ class Game:
                     break
 
     
+
 # This fuction intialises the game and provides logic to determine the winner on a first to 3 wins basis
 def game():
+    """
+    This function runs the game of rock, paper, scissors. It creates an instance of the Game class and calls the game_intro() method to display an introduction screen with instructions.
+    Then it enters a while loop that will run the game until either the computer or the user wins 3 rounds.
+    The function uses the get_computer_choice(), get_user_choice() and get_winner() methods from the Game class to determine the winner of each round.
+    It also uses the result_report() method to display the results of the round.
+    The function uses the 'cv2' module to handle the windows and the 'time' module to handle the timers.
+    The function breaks the loop and return nothing once the game is completed.
+    """
     computer_wins = 0
     user_wins = 0
     game1 = Game(computer_wins, user_wins) # Initalises the class
@@ -267,7 +347,8 @@ def game():
             game1.get_winner(game1.get_computer_choice(), game1.get_user_choice())
             game1.result_report(game1.user_choice, game1.computer_choice)
 
-            
 
-game()
+
+if __name__ == "__main__":        
+    game()
 ```
