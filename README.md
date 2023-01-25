@@ -2,7 +2,7 @@
 The aim of this project was to develop skills within computer vision. To develop these skills, a game of rock, paper, scissors was created using teachablemachine.withgoogle.com to train a model based on several images from 3 different classes, the game was then developed in python using this image based model.
 
 ## Milestone 2
-### Using teachablemachine.withgoogle.com a model was trained with images for 3 classes ('Rock', 'Paper', 'Scissors'). The model was then trained by the software on the site and can be seen below.
+Using teachablemachine.withgoogle.com a model was trained with images for 3 classes ('Rock', 'Paper', 'Scissors'). The model was then trained by the software on the site and can be seen below.
 ```
 from keras.models import load_model
 from PIL import Image, ImageOps
@@ -50,7 +50,7 @@ print('Confidence Score: ', confidence_score)
 ```
 
 ## Milestone 4 (Manual_rps.py)
-### This .py document provides a manual version of the rock, paper scissors game that requires a user input to play against a randomly chosen computer choice
+This .py document provides a manual version of the rock, paper scissors game that requires a user input to play against a randomly chosen computer choice
 
 ```
 import random
@@ -104,8 +104,9 @@ play()
 ```
 
 ## Milestone 5 (camera_rps.py)
-### This milestone introduced the user input via the camera. Therefore the rps template was used to use the recorded CV model to provide predictions from the users camera input. The game was also enclosed within a class which is then called and intialised by one function at the bottom of the code. Finally, messages are included in the camera frame on the users screen using CV2.PutText, the aim of this is to improve the users gameplay experience. Several areas of the code have been improved. Here the get_winner() function has been compacted to improve readibility. The countdown before the game commences has also been imrpoved to work by seconds and not count as previosuly done in milestone 4 (above).
-'''
+This milestone introduced the user input via the camera. Therefore the rps template was used to use the recorded CV model to provide predictions from the users camera input. The game was also enclosed within a class which is then called and intialised by one function at the bottom of the code. Finally, messages are included in the camera frame on the users screen using CV2.PutText, the aim of this is to improve the users gameplay experience. Several areas of the code have been improved. Here the get_winner() function has been compacted to improve readibility. The countdown before the game commences has also been imrpoved to work by seconds and not count as previosuly done in milestone 4 (above).
+
+```
 
 #Imports the required packages for this project
 import random
@@ -240,8 +241,7 @@ class Game:
                     break
 
     
-
-    # This fuction intialises the game and provides logic to determine the winner on a first to 3 wins basis
+# This fuction intialises the game and provides logic to determine the winner on a first to 3 wins basis
 def game():
     computer_wins = 0
     user_wins = 0
@@ -270,4 +270,4 @@ def game():
             
 
 game()
-'''
+```
